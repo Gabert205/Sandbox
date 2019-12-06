@@ -1,12 +1,12 @@
 public class Cell {
-    private Element element;//what the Cell's elemental type is
+    public Element element;//what the Cell's elemental type is
     private Cell[] neighbors;//the orthogonal neighbors of the Cell
     //private double temperature;//the temperature of the Cell
     //private double airPressure;
     
     public Cell(){
-        // TODO: 12/5/2019 Change this the default element to air 
-        element = null;
+        // TODO: 12/5/2019 Change the default element to air
+        element = new Element();
         neighbors = new Cell[4];
     }
     

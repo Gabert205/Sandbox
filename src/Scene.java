@@ -5,5 +5,51 @@ public class Scene {
     public Scene(int width, int height){
         cells = new Cell[width][height];
         pic = new Picture(width, height);
+
+        //fills cells with new Cells
+        for (int x = 0; x < cells.length; x++) {
+            for (int y = 0; y < cells[x].length; y++) {
+
+                cells[x][y] = new Cell();
+            }//y
+        }//x
+
+        draw();
+    }
+
+    //==================================================================================================================
+
+    //calls the update method for each of the Cells
+    public void update(){
+        for (int x = 0; x < cells.length; x++) {
+            for (int y = 0; y < cells[x].length; y++) {
+
+                // TODO: 12/5/2019 make this method
+            }//y
+        }//x
+    }
+
+    //==================================================================================================================
+
+    //fills pic with everything that is needed and shows on the screen
+    public void draw(){
+
+        for (int x = 0; x < cells.length; x++) {
+            for (int y = 0; y < cells[x].length; y++) {
+
+                switch (cells[x][y].element.type){
+
+                    case "water":
+                        pic.setRGB(x, y, 0x0000FF);
+                        break;
+
+                    default:
+                        pic.setRGB(x, y, 0x000000);
+                        break;
+                }
+            }//y
+        }//x
+
+        pic.show();
     }
 }
