@@ -6,8 +6,8 @@ public class Element {
     public String type;//the name of the element
     private boolean locked;//if true, the element won't change positions
 
-    public Element() {
-        pos = new Vector();
+    public Element(double x, double y) {
+        pos = new Vector(x, y);
         vel = new Vector();
         acc = new Vector();
         neighbors = new Element[4];
@@ -35,6 +35,35 @@ public class Element {
     //returns the pixel value of the y position
     public int getY() {
         return (int) ( Math.round(pos.getY()) );
+    }
+
+    public Vector getPos() {
+        return pos;
+    }
+
+    public void setPos(double x, double y) {
+        this.pos = new Vector(x, y);
+    }
+
+    public Vector getVel() {
+        return vel;
+    }
+
+    public void setVel(double x, double y) {
+        this.vel = new Vector(x, y);
+    }
+
+    public Vector getAcc() {
+        return acc;
+    }
+
+    public void setAcc(double x, double y) {
+        this.acc = new Vector(x, y);
+    }
+
+    public void addAcc(double x, double y){
+        this.acc.addX(x);
+        this.acc.addY(y);
     }
 
     //returns the neighbor at the given index
