@@ -1,17 +1,19 @@
 public class Scene {
     private Element[][] elements;//contains each of the elements [x][y]
     private Picture pic;//what the user sees on the screen
-    private final double GRAVITY = 1;//the acceleration of gravity
+    private final double GRAVITY = -.01;//the acceleration of gravity
+    private final boolean FLOOR = true;//if there is a floor on the ground
 
     public Scene(int width, int height) {
         elements = new Element[width][height];
         pic = new Picture(width, height);
+        pic.setOriginLowerLeft();
 
-        resetCells();
+        elements = makeNewCells();
 
         // TODO: 12/5/2019 DELETE ME
         for (int x = 0 ; x < elements.length ; x++) {
-            for (int y = elements[x].length / 2 ; y < elements[x].length ; y++) {
+            for (int y = 0 ; y < elements[x].length; y++) {
 
                 elements[x][y] = new Water(x, y);
             }//y
@@ -26,34 +28,35 @@ public class Scene {
 
 
     //sets the acceleration of gravity of each cell to GRAVITY
-    //---WARNING--- it only adds gravity, so if there is already an acceleration, there is now more
     private void addGravity(){
         for (int x = 0 ; x < elements.length ; x++) {
             for (int y = 0 ; y < elements[x].length ; y++) {
 
-                elements[x][y].addAcc(0, GRAVITY);
+                elements[x][y].addVel(0, GRAVITY);
             }//y
         }//x
     }
 
-    //removes the acceleration of gravity
-    //---WARNING--- it only subtracts gravity, so if there is no acceleration, it will accelerate upwards
-    private void removeGravity(){
+    //returns an Element[][] with new Elements
+    private Element[][] makeNewCells(){
+        Element[][] elementsCopy = new Element[elements.length][elements[0].length];
+
         for (int x = 0 ; x < elements.length ; x++) {
             for (int y = 0 ; y < elements[x].length ; y++) {
 
-                elements[x][y].addAcc(0, 0);
+                elementsCopy[x][y] = new Element(x, y);
             }//y
         }//x
+
+        return elementsCopy;
     }
 
-    //fills elements with new Cells
-    private void resetCells(){
-
+    //if a element is null, change it to a default element
+    private void cleanUpCells(){
         for (int x = 0 ; x < elements.length ; x++) {
             for (int y = 0 ; y < elements[x].length ; y++) {
 
-                elements[x][y] = new Element(x, y);
+                if(elements[x][y] == null) elements[x][y] = new Element(x, y);
             }//y
         }//x
     }
@@ -63,10 +66,11 @@ public class Scene {
 
     //==================================================================================================================
 
+    //does all of the fun stuff
     public void run(){
-        addGravity();
 
         while (true){
+            addGravity();
             update();
             draw();
         }
@@ -80,14 +84,38 @@ public class Scene {
                 elements[x][y].update();
             }//y
         }//x
+
+        updateIndexes();
     }
 
     //==================================================================================================================
 
+    // TODO: 12/5/2019 method broken 
+    //moves the elements to their "proper" indexes
     public void updateIndexes(){
-        Element[][] elementsCopy = elements.clone();
+        Element[][] elementsCopy = new Element[elements.length][elements[0].length];
 
+        for (int x = 0 ; x < elements.length ; x++) {
+            for (int y = 0 ; y < elements[x].length ; y++) {
 
+                //for every element, move the element to its x, y position
+                Element element = elements[x][y];
+
+                if(!element.type.equals("N/A")) {
+
+                    //if the element's new position is inside
+                    if (element.getY() >= 0 && element.getY() < elements[0].length &&
+                            element.getX() >= 0 && element.getX() < elements.length) {
+
+                        elementsCopy[element.getX()][element.getY()] = element;
+                    }
+                }
+            }//y
+        }//x
+
+        elements = elementsCopy;
+
+        cleanUpCells();
     }
 
     //==================================================================================================================

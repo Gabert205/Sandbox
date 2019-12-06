@@ -53,6 +53,11 @@ public class Element {
         this.vel = new Vector(x, y);
     }
 
+    public void addVel(double x, double y){
+        this.vel.addX(x);
+        this.vel.addY(y);
+    }
+
     public Vector getAcc() {
         return acc;
     }
